@@ -13,10 +13,6 @@ public class OrderSteps {
 
     private final OrderClient orderClient = new OrderClient();
 
-    /**
-     * Отправляет запрос на принятие заказа.
-     * Если courierId или orderId == null, параметр не добавляется.
-     */
     public Response acceptOrder(Integer courierId, Integer orderId) {
         var request = given();
 
@@ -33,17 +29,10 @@ public class OrderSteps {
                 .put(ORDER_ACCEPT_PATH);
     }
 
-    /**
-     * Отправляет запрос на создание заказа через OrderClient
-     */
     public Response createOrder(Order order) {
         return orderClient.createOrder(order);
     }
 
-    /**
-     * Отправляет запрос на получение заказа по треку.
-     * Если track == null, запрос отправляется без параметра.
-     */
     public Response getOrderByTrack(Integer track) {
         var request = given();
 
@@ -56,9 +45,6 @@ public class OrderSteps {
                 .get(ORDER_TRACK_PATH);
     }
 
-    /**
-     * Отправляет запрос на получение списка заказов.
-     */
     public Response getOrdersList() {
         return orderClient.getOrdersList();
     }

@@ -1,10 +1,14 @@
-package courier;
+package tests.courier;
 
+import client.CourierClient;
+import model.CourierLogin;
 import io.restassured.response.Response;
+import model.Courier;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.apache.http.HttpStatus.*;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -22,7 +26,7 @@ public class CourierCreateTest {
     @Test
     public void courierCanBeCreated() {
         Response response = courierClient.createCourier(courier);
-        response.then().statusCode(201);
+        response.then().statusCode(SC_CREATED);
 
         boolean isOk = response.jsonPath().getBoolean("ok");
         assertThat(isOk, equalTo(true));
@@ -36,10 +40,10 @@ public class CourierCreateTest {
 
     @Test
     public void cannotCreateDuplicateCourier() {
-        courierClient.createCourier(courier).then().statusCode(201);
+        courierClient.createCourier(courier).then().statusCode(SC_CREATED);
         Response secondResponse = courierClient.createCourier(courier);
 
-        secondResponse.then().statusCode(409);
+        secondResponse.then().statusCode(SC_CONFLICT);
         String message = secondResponse.jsonPath().getString("message");
         assertThat(message, equalTo("Этот логин уже используется. Попробуйте другой."));
 
@@ -53,13 +57,13 @@ public class CourierCreateTest {
     public void cannotCreateCourierWithoutRequiredFields() {
         Courier missingLogin = new Courier(null, "1234", "NoLogin");
         Response response1 = courierClient.createCourier(missingLogin);
-        response1.then().statusCode(400);
+        response1.then().statusCode(SC_BAD_REQUEST);
         String message1 = response1.jsonPath().getString("message");
         assertThat(message1, equalTo("Недостаточно данных для создания учетной записи"));
 
         Courier missingPassword = new Courier("login_" + System.currentTimeMillis(), null, "NoPass");
         Response response2 = courierClient.createCourier(missingPassword);
-        response2.then().statusCode(400);
+        response2.then().statusCode(SC_BAD_REQUEST);
         String message2 = response2.jsonPath().getString("message");
         assertThat(message2, equalTo("Недостаточно данных для создания учетной записи"));
     }

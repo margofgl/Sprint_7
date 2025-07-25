@@ -1,6 +1,9 @@
-package courier;
+package tests.courier;
 
+import client.CourierClient;
+import model.CourierLogin;
 import io.restassured.response.Response;
+import model.Courier;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

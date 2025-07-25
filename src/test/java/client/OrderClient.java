@@ -1,7 +1,8 @@
-package order;
+package client;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import model.Order;
 
 import static io.restassured.RestAssured.given;
 

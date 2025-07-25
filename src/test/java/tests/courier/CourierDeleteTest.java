@@ -1,7 +1,11 @@
-package courier;
+package tests.courier;
 
 import static io.restassured.RestAssured.given;
+
+import client.CourierClient;
+import model.CourierLogin;
 import io.restassured.response.Response;
+import model.Courier;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,13 +16,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class CourierDeleteTest {
 
     private CourierClient courierClient;
-    private Courier courier;
     private int courierId;
 
     @Before
     public void setUp() {
         courierClient = new CourierClient();
-        courier = new Courier("delete_login_" + System.currentTimeMillis(), "pass123", "DeleteMe");
+        Courier courier = new Courier("delete_login_" + System.currentTimeMillis(), "pass123", "DeleteMe");
         courierClient.createCourier(courier);
         Response loginResponse = courierClient.loginCourier(new CourierLogin(courier.getLogin(), courier.getPassword()));
         courierId = loginResponse.jsonPath().getInt("id");
